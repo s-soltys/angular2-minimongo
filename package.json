@@ -1,0 +1,38 @@
+{
+  "name": "ngx-minimongo",
+  "version": "2.0.0",
+  "description": "Minimongo module for Angular 2+",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "tsc"
+  },
+  "repository": {
+    "prepublish": "npm run build",
+    "type": "git",
+    "url": "git+https://github.com/s-soltys/ngx-minimongo.git"
+  },
+  "keywords": [
+    "angular2",
+    "minimongo",
+    "angular",
+    "mongo"
+  ],
+  "author": "Szymon Soltysiak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/s-soltys/ngx-minimongo/issues"
+  },
+  "homepage": "https://github.com/s-soltys/ngx-minimongo#readme",
+  "dependencies": {
+    "@angular/core": "^2.3.1",
+    "minimongo": "^4.3.1",
+    "rxjs": "^5.0.1",
+    "zone.js": "^0.7.2",
+    "core-js": "^2.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^2.1.6",
+    "tsc": "^1.20150623.0"
+  }
+}
