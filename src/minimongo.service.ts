@@ -1,7 +1,9 @@
+declare const require: (name: string) => any;
+
 import { MinimongoConfig } from './minimongo.config';
 import { MinimongoCollection } from './collection/minimongo-collection';
 import { Inject, Injectable } from '@angular/core';
-import * as minimongo from 'minimongo';
+const minimongo = require('minimongo');
 
 @Injectable()
 export class MinimongoService {
