@@ -1,7 +1,7 @@
 import { MinimongoConfig } from './minimongo.config';
 import { MinimongoService } from './minimongo.service';
-import { MinimongoEntity } from './collection/minimongo-entity';
-import { MinimongoCollection } from './collection/minimongo-collection';
+import { Entity } from './collection/entity';
+import { ObservableCollection } from './collection/observable-collection';
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
 
 @NgModule()
@@ -26,6 +26,6 @@ export class MinimongoModule {
 export {
   MinimongoConfig,
   MinimongoService,
-  MinimongoCollection,
-  MinimongoEntity
+  Entity,
+  ObservableCollection
 }

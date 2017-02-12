@@ -1,8 +1,9 @@
-declare const require: (name: string) => any;
-
+import { ObservableCollection } from './collection/observable-collection';
+import { Collection } from './collection/collection';
 import { MinimongoConfig } from './minimongo.config';
-import { MinimongoCollection } from './collection/minimongo-collection';
 import { Inject, Injectable } from '@angular/core';
+
+declare const require: (name: string) => any;
 const minimongo = require('minimongo');
 
 @Injectable()
@@ -17,12 +18,15 @@ export class MinimongoService {
         return this.db;
     }
 
-    getCollection<T>(collectionName: string): MinimongoCollection<T> {
+    getCollection<T>(collectionName: string): ObservableCollection<T> {
         if (!this.db.collections[collectionName]) {
             this.db.addCollection(collectionName);
         }
 
-        return this.db.collections[collectionName] as MinimongoCollection<T>;
-    }
+        const collection = this.db.collections[collectionName] as Collection<T>;
 
+        const observableCollection = new ObservableCollection(collection);
+
+        return observableCollection;
+    }
 }
