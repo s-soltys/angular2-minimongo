@@ -1,0 +1,51 @@
+{
+  "project": {
+    "version": "1.0.0-beta.26",
+    "name": "angular2-minimongo"
+  },
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "assets/favicon.ico"
+      ],
+      "index": "assets/index.html",
+      "test": "test.ts",
+      "tsconfig": "../tsconfig.json",
+      "prefix": "app",
+      "mobile": false,
+      "styles": [
+        "assets/styles.css"
+      ],
+      "scripts": [],
+      "environments": {
+        "source": "environments/environment.ts",
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.ts"
+      }
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
+  }
+}
