@@ -1,4 +1,5 @@
 # angular2-minimongo
+![travis build results](https://travis-ci.org/s-soltys/angular2-minimongo.svg?branch=master)
 Use minimongo in your Angular 2 app.
 This package exposes the [minimongo](https://github.com/mWater/minimongo) library as an Angular2 module with providers.
 
