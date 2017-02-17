@@ -55,3 +55,4 @@ ng test
 
 # Roadmap:
 - Implement additional and more robust collection methods
+- Support IndexedDb, WebSQLDb, LocalStorageDb and MemoryDb minimongo implementation selection
