@@ -8,8 +8,8 @@ $ npm install --save angular2-minimongo
 ```
 
 # How to use:
+## Import the Minimongo module in your bootstrap module:
 ```
-// Import the Minimongo module in your bootstrap module:
 import { MinimongoModule } from 'angular2-minimongo';
 
 @NgModule({
@@ -18,8 +18,10 @@ import { MinimongoModule } from 'angular2-minimongo';
     ]
 })
 export class AppModule { }
+```
 
-// Import and use the Minimongo service:
+## Import and use the Minimongo service:
+```
 import { MinimongoService } from 'angular2-minimongo';
 
 @Injectable()
@@ -30,8 +32,10 @@ export class TaskService {
 
   }
 }
+```
 
-// Usage: a collection object contains 3 methods:
+## Usage: a collection object contains 3 methods:
+```
 // Find entities based on the standard mongo selector and objects.
 find<T>(selector: any = {}, options?: any): Observable<T[]>;
 
