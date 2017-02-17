@@ -1,6 +1,6 @@
 {
   "name": "angular2-minimongo",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Minimongo module for Angular 2+",
   "main": "src/minimongo/minimongo.module.ts",
   "repository": {
