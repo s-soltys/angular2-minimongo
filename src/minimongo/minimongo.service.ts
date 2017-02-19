@@ -13,7 +13,7 @@ export class Minimongo {
         this.db = new dbConstructor({ namespace: config.namespace });
     }
 
-    get getDbHandle() {
+    get database() {
         return this.db;
     }
 

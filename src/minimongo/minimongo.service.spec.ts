@@ -1,38 +1,95 @@
+import { ObservableCollection } from './observable-collection';
+import { Observable } from 'rxjs/Rx';
 /* tslint:disable:no-unused-variable */
-
 import { TestBed, async, inject } from '@angular/core/testing';
 import { Minimongo } from './minimongo.service';
 import { MinimongoConfig } from './minimongo.config';
 
+interface TestEntity {
+  _id?: string;
+  name: string;
+  value: number;
+  tags?: (string | number)[];
+}
+
 describe('MinimongoService', () => {
+  let _minimongo: Minimongo;
+  let _collection: ObservableCollection<TestEntity>;
+
   beforeEach(() => {
-    let config: MinimongoConfig = { namespace: 'test-db', type: 'MemoryDb' };
     TestBed.configureTestingModule({
-      providers: [
-        Minimongo,
-        { provide: MinimongoConfig, useValue: config }
-      ]
+      providers: [Minimongo, { provide: MinimongoConfig, useValue: { namespace: 'test-db', type: 'MemoryDb' } }]
     });
   });
 
-  it('should be instantiable', inject([Minimongo], (service: Minimongo) => {
-    expect(service).toBeTruthy();
+  beforeEach(inject([Minimongo], (minimongo: Minimongo) => {
+    _minimongo = minimongo;
+    _collection = minimongo.getCollection<TestEntity>('test');
   }));
 
-  it('should create collections', inject([Minimongo], (service: Minimongo) => {
-    let col = service.getCollection('test');
-    expect(col).toBeTruthy();
-  }));
+  it('should be instantiable', () => {
+    expect(_minimongo).not.toBeNull();
+  });
+  
+  it('should create collections', () => {
+    expect(_collection).not.toBeNull();
+  });
 
-  it('upsert and retrieve', inject([Minimongo], (service: Minimongo) => {
-    let col = service.getCollection<any>('test');
+  it('upsert, find and remove a single entity', done => {
+    let eOriginal: TestEntity = { name: 'xxx', value: 123, tags: ['a', 2, 'c'] };
+    let eSaved: TestEntity;
+    let eRetrieved1: TestEntity;
+    let eRetrieved2: TestEntity;
+    let deleteResult: any;
+    let eRetrievedAfterDelete: TestEntity;
 
-    col
-      .upsert({ name: 'xxx' })
-      .switchMap(_ => col.find({}))
-      .subscribe(results => {
-        expect(results.length).toBe(1);
-        expect(results[0].name).toBe('xxx');
+    _collection
+      .upsert(eOriginal)
+        .do(o => eSaved = o)
+      .switchMap(o => _collection.findOne({ _id: o._id }))
+        .do(o => eRetrieved1 = o)
+      .switchMap(o => _collection.findOne(o._id))
+        .do(o => eRetrieved2 = o)
+      .switchMap(o => _collection.remove(o._id))
+        .do(o => deleteResult = o)
+      .switchMap(o => _collection.findOne({ _id: eSaved._id }))
+        .do(o => eRetrievedAfterDelete = o)
+      .subscribe(_ => {
+        expect(eSaved).toEqual(eOriginal);
+        expect(eRetrieved1).toEqual(eOriginal);
+        expect(eRetrieved2).toEqual(eOriginal);
+        expect(deleteResult).toBeUndefined();
+        expect(eRetrievedAfterDelete).toBeNull();
+        done();
       });
-  }));
+  });
+
+  it('upsert, find and remove a multiple entities', done => {
+    let eOriginal: TestEntity = { name: 'xxx', value: 123, tags: ['a', 2, 'c'] };
+    let eSaved: TestEntity;
+    let eRetrieved1: TestEntity;
+    let eRetrieved2: TestEntity;
+    let deleteResult: any;
+    let eRetrievedAfterDelete: TestEntity;
+
+    _collection
+      .upsert(eOriginal)
+        .do(o => eSaved = o)
+      .switchMap(o => _collection.findOne({ _id: o._id }))
+        .do(o => eRetrieved1 = o)
+      .switchMap(o => _collection.findOne(o._id))
+        .do(o => eRetrieved2 = o)
+      .switchMap(o => _collection.remove(o._id))
+        .do(o => deleteResult = o)
+      .switchMap(o => _collection.findOne({ _id: eSaved._id }))
+        .do(o => eRetrievedAfterDelete = o)
+      .subscribe(_ => {
+        expect(eSaved).toEqual(eOriginal);
+        expect(eRetrieved1).toEqual(eOriginal);
+        expect(eRetrieved2).toEqual(eOriginal);
+        expect(deleteResult).toBeUndefined();
+        expect(eRetrievedAfterDelete).toBeNull();
+        done();
+      });
+  });
 });
