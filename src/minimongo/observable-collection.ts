@@ -5,7 +5,7 @@ export interface ObservableCollection<T> {
     findOne(id: string): Observable<T>;
     findOne(selector: any, options?: any): Observable<T>;
     find(selector?: any, options?: any): Observable<T[]>;
-    upsert(docs: T): Observable<T>;
+    upsert(doc: T): Observable<T>;
     upsert(docs: T[]): Observable<T[]>;
     remove(id: string): Observable<void>;
 }
@@ -14,62 +14,52 @@ export class MinimongoObservableCollection<T extends Entity> implements Observab
     constructor(private collection) { }
 
     findOne(selector: any, options?: any): Observable<T> {
-        let subscription = (observer: Subscriber<T>) => {
-            let successCallback = result => {
-                observer.next(result);
-                observer.complete();
-            };
-            let errorCallback = error => observer.error(error);
-
-            if (typeof selector === 'string'){
+        return createSource<T>((success, error) => {
+            if (typeof selector === 'string') {
                 selector = { _id: selector };
             }
 
-            this.collection.findOne(selector, options, successCallback, errorCallback);
-        };
-
-        return new Observable(subscription);
+            this.collection.findOne(selector, options, success, error);
+        });
     }
 
     find(selector: any = {}, options?: any): Observable<T[]> {
-        let subscription = (observer: Subscriber<T[]>) => {
-            let successCallback = result => {
-                observer.next(result);
-                observer.complete();
-            };
-            let errorCallback = error => observer.error(error);
-
-            this.collection.find(selector, options).fetch(successCallback, errorCallback);
-        };
-
-        return new Observable(subscription);
+        return createSource<T[]>((success, error) => {
+            this.collection.find(selector, options).fetch(success, error);
+        });
     }
 
     upsert(doc: T | T[]): Observable<T | T[]> {
-        let subscription = (observer: Subscriber<T>) => {
-            let successCallback = result => {
-                observer.next(result);
-                observer.complete();
-            };
-            let errorCallback = error => observer.error(error);
-
-            this.collection.upsert(doc, successCallback, errorCallback);
-        };
-
-        return new Observable(subscription);
+        return createSource<T | T[]>((success, error) => {
+            this.collection.upsert(doc, success, error);
+        });
     }
 
     remove(id: string): Observable<void> {
-        let subscription = (observer: Subscriber<void>) => {
-            let successCallback = result => {
-                observer.next(result);
-                observer.complete();
-            };
-            let errorCallback = error => observer.error(error);
+        return createSource<void>((success, error) => {
+            this.collection.remove(id, success, error);
+        });
+    }
 
-            this.collection.remove(id, successCallback, errorCallback);
+}
+
+interface ExecActions<T> {
+    (successCallback: (result: T) => void, errorCallback: (error: Error) => void): void;
+}
+
+function createSource<T>(exec: ExecActions<T>): Observable<T> {
+    const source = new Observable((observer: Subscriber<T>) => {
+        const successCallback = (result: T) => {
+            observer.next(result);
+            observer.complete();
         };
 
-        return new Observable(subscription);
-    }
+        const errorCallback = (error: Error) => {
+            observer.error(error);
+        };
+
+        exec(successCallback, errorCallback);
+    });
+
+    return source;
 }
