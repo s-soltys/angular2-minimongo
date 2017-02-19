@@ -1,5 +1,5 @@
 # angular2-minimongo
-![travis build results](https://travis-ci.org/s-soltys/angular2-minimongo.svg?branch=master)
+[![Build Status](https://travis-ci.org/s-soltys/angular2-minimongo.svg?branch=master)](https://travis-ci.org/s-soltys/angular2-minimongo)
 
 Use minimongo in your Angular 2 app.
 This package exposes the [minimongo](https://github.com/mWater/minimongo) library as an Angular2 module with providers.
@@ -10,8 +10,8 @@ $ npm install --save angular2-minimongo
 ```
 
 # How to use:
-## Import the Minimongo module in your bootstrap module:
-```
+### Import the Minimongo module in your bootstrap module:
+```typescript
 import { MinimongoModule } from 'angular2-minimongo';
 
 @NgModule({
@@ -22,8 +22,8 @@ import { MinimongoModule } from 'angular2-minimongo';
 export class AppModule { }
 ```
 
-## Import and use the Minimongo service:
-```
+### Import and use the Minimongo service:
+```typescript
 import { MinimongoService } from 'angular2-minimongo';
 
 @Injectable()
@@ -36,16 +36,21 @@ export class TaskService {
 }
 ```
 
-## Usage: a collection object contains 3 methods:
-```
-// Find entities based on the standard mongo selector and objects.
-find<T>(selector: any = {}, options?: any): Observable<T[]>;
-
-// Upsert docs
-upsert<T>(doc: T): Observable<T>;
-
-// Remove documents by id
-remove(id: string): Observable<void>;
+### Usage: the collection interface
+```typescript
+/*
+Types are the best documentation.
+Collections provided by the Minimongo service implement the ObservableCollection interface.
+Parameters named selector and docs are standard mongo selectors.
+*/
+export interface ObservableCollection<T> {
+    findOne(id: string): Observable<T>;
+    findOne(selector: any, options?: any): Observable<T>;
+    find(selector?: any, options?: any): Observable<T[]>;
+    upsert(doc: T): Observable<T>;
+    upsert(docs: T[]): Observable<T[]>;
+    remove(id: string): Observable<void>;
+}
 ```
 
 # How to build and test:
