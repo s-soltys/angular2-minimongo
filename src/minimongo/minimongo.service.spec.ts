@@ -6,8 +6,12 @@ import { MinimongoConfig } from './minimongo.config';
 
 describe('MinimongoService', () => {
   beforeEach(() => {
+    let config: MinimongoConfig = { namespace: 'test-db', type: 'MemoryDb' };
     TestBed.configureTestingModule({
-      providers: [Minimongo, { provide: MinimongoConfig, useValue: { namespace: 'tt' } }]
+      providers: [
+        Minimongo,
+        { provide: MinimongoConfig, useValue: config }
+      ]
     });
   });
 

@@ -9,7 +9,8 @@ export class Minimongo {
     private readonly db;
 
     constructor(private config: MinimongoConfig) {
-        this.db = new minimongo.LocalStorageDb({ namespace: config.namespace });
+        const dbConstructor = minimongo[config.type];
+        this.db = new dbConstructor({ namespace: config.namespace });
     }
 
     get getDbHandle() {

@@ -10,8 +10,8 @@
     "declaration": true,
     "lib": ["es6", "dom"]
   },
-  "files": [
-    "src/minimongo.module.ts"
+  "include": [
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
