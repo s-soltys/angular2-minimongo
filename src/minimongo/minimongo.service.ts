@@ -1,4 +1,4 @@
-import { ObservableCollection } from './observable-collection';
+import { ObservableCollection, MinimongoObservableCollection } from './observable-collection';
 import { MinimongoConfig } from './minimongo.config';
 import { Inject, Injectable } from '@angular/core';
 import { Entity } from './entity';
@@ -24,7 +24,7 @@ export class Minimongo {
 
         const collection = this.db.collections[name];
 
-        const observableCollection = new ObservableCollection(collection);
+        const observableCollection = new MinimongoObservableCollection(collection);
 
         return observableCollection;
     }
